@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/opt/arduino/1.8.5/hardware/arduino/avr/cores/arduino",
+                "${workspaceRoot}",
+                "/home/dowster/Downloads/arduino-1.8.5-linux64/arduino-1.8.5/hardware/arduino/avr/cores/arduino",
+                "/home/dowster/.arduino15/packages/esp8266/hardware/esp8266/2.3.0/cores/esp8266"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": false,
+                "path": [
+                    "/opt/arduino/1.8.5/hardware/arduino/avr/cores/arduino",
+                    "${workspaceRoot}",
+                    "/home/dowster/Downloads/arduino-1.8.5-linux64/arduino-1.8.5/hardware/arduino/avr/cores/arduino",
+                    "/home/dowster/.arduino15/packages/esp8266/hardware/esp8266/2.3.0/cores/esp8266"
+                ]
+            },
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 3
+}
