@@ -1,12 +1,10 @@
-#pragma once
-
 #include "Relay.h"
-#include "Arduino.h"
+#include "mgos_gpio.h"
 
 Relay::Relay(int pin)
 {
     this->pin = pin;
-    pinMode(pin, OUTPUT);
+    mgos_gpio_set_mode(pin, MGOS_GPIO_MODE_OUTPUT);
 }
 
 void Relay::turnOn()
@@ -14,7 +12,7 @@ void Relay::turnOn()
     if(!this->activated)
     {
         this->activated = true;
-        digitalWrite(this->pin, HIGH);
+        mgos_gpio_write(this->pin, true);
     }
 }
 
@@ -23,7 +21,7 @@ void Relay::turnOff()
     if(this->activated)
     {
         this->activated = false;
-        digitalWrite(this->pin, LOW);
+        mgos_gpio_write(this->pin, false);
     }
 }
 

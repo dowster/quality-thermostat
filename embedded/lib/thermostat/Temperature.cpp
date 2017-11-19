@@ -1,8 +1,6 @@
-#pragma once
+#include <cstddef>
 
 #include "Temperature.h"
-#include "Arduino.h"
-
 
 Temperature::Temperature(float temp, Temperature::Unit unit)
 {

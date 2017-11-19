@@ -1,7 +1,11 @@
+extern "C"{
+#include "mgos.h"
+}
+
+#include <cstddef>
 
 #include "Thermostat.h"
 #include "Temperature.h"
-#include "Arduino.h"
 
 Thermostat::Thermostat(
     TemperatureSensor * temperatureSensor,
@@ -13,8 +17,8 @@ Thermostat::Thermostat(
     this->heatingRelay = heatingRelay;
     this->coolingRelay = coolingRelay;
 
-    this->setOperatingMode(Thermostat::OperatingModes::Off);
-    this->setTarget(new Temperature(69, Temperature::Unit::FARENHEIT));    
+    //this->setOperatingMode(Thermostat::OperatingModes::Off);
+    //this->setTarget(new Temperature(69, Temperature::Unit::FARENHEIT));    
 }
 
 void Thermostat::setOperatingMode(OperatingModes mode)
@@ -29,7 +33,7 @@ Thermostat::OperatingModes Thermostat::getOperatingMode()
 
 void Thermostat::setTarget(Temperature * target)
 {
-    if(this->target != NULL)
+    //if(this->target != NULL)
         delete this->target;
 
     this->target = target;
@@ -141,28 +145,19 @@ void Thermostat::runOff()
         this->debounce = 0;
 }
 
-String Thermostat::getStatus()
+void Thermostat::getStatus()
 {
-    String statusString = String("Thermostat Status:\n");
-    statusString += "  Current Temperature: ";
     Temperature * currentTemp = this->getTemperature();
-    statusString += currentTemp->getTemperature(Temperature::Unit::FARENHEIT);
-    statusString += "F\n";
 
-    // statusString += "  Target - Threshold: " + String((*this->getTarget() - this->Threshold).getTemperature(Temperature::Unit::FARENHEIT)) + "\n";
-
-    // statusString += "  Current Temp < (Target - Threshold): " + String((*currentTemp < *this->getTarget() - this->Threshold) ? "Yes\n" : "No\n");
-
+    LOG(LL_INFO, ("  Current Temperature: %f F", currentTemp->getTemperature(Temperature::Unit::FARENHEIT)));
     delete currentTemp;
 
-    statusString += "  Current Threshold: " + String(this->Threshold.getTemperature(Temperature::Unit::FARENHEIT)) + "F\n";
+    LOG(LL_INFO, ("  Current Threshold: %f F", this->Threshold.getTemperature(Temperature::Unit::FARENHEIT)));
 
-    statusString += "  Current Target: " + String(this->target->getTemperature(Temperature::Unit::FARENHEIT)) + "F\n";
+    LOG(LL_INFO, ("  Current Target: %f F", this->target->getTemperature(Temperature::Unit::FARENHEIT)));
 
-    statusString += "  Current Debounce Value: " + String(this->debounce) + "\n";
+    LOG(LL_INFO, ("  Current Debounce Value: %i", this->debounce));
 
-    statusString += "  Heating Relay Status: " + String((this->heatingRelay->getActivated()) ? "On\n" : "Off\n");
-    statusString += "  Cooling Relay Status: " + String((this->coolingRelay->getActivated()) ? "On\n" : "Off\n");
-
-    return statusString;
+    LOG(LL_INFO, ("  Heating Relay Status: %s", (this->heatingRelay->getActivated()) ? "On\n" : "Off\n"));
+    LOG(LL_INFO, ("  Cooling Relay Status: %s", (this->coolingRelay->getActivated()) ? "On\n" : "Off\n"));
 }

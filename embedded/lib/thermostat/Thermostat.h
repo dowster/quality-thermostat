@@ -43,7 +43,7 @@ public:
 
     Thermostat() { };
 
-    String getStatus();
+    void getStatus();
 
 private:
    // Thermostat(Thermostat * thermostat) { };
@@ -55,8 +55,8 @@ private:
     void runCool();
 
     OperatingModes operatingMode = Off;
-    Temperature * target;
-    TemperatureSensor * temperatureSensor;
+    Temperature * target = 0;
+    TemperatureSensor * temperatureSensor = 0;
     Relay * heatingRelay;
     Relay * coolingRelay;
     int debounce = 0;
