@@ -14,6 +14,8 @@ public:
 
     Temperature(float temp, Unit unit);
 
+    Temperature(const Temperature& temp);
+
     float getTemperature() const;
 
     float getTemperature(Unit unit) const;
@@ -29,6 +31,8 @@ public:
     Temperature operator+(const Temperature& temp);
 
     Temperature operator-(const Temperature& temp);
+
+    Temperature operator=(const Temperature& temp);
     
     Temperature() { };
 

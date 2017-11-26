@@ -7,6 +7,11 @@ Temperature::Temperature(float temp, Temperature::Unit unit)
     this->setTemperature(temp, unit);
 }
 
+Temperature::Temperature(const Temperature& temp)
+{
+    this->temperature = temp.temperature;
+}
+
 float Temperature::getTemperature() const
 {
     return this->getTemperature(Temperature::CurrentUnit);
@@ -65,4 +70,13 @@ Temperature Temperature::operator+(const Temperature& temp)
 Temperature Temperature::operator-(const Temperature& temp)
 {
     return Temperature(this->getTemperature(FARENHEIT) - temp.getTemperature(FARENHEIT), FARENHEIT);
+}
+
+Temperature Temperature::operator=(const Temperature& temp)
+{
+    Temperature newTemp;
+
+    newTemp.temperature = temp.temperature;
+
+    return newTemp;
 }

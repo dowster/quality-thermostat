@@ -33,9 +33,17 @@ public:
 
     OperatingModes getOperatingMode();
 
-    void setTarget(Temperature * target);
+    void setSource(TargetSource source);
 
-    Temperature * getTarget();
+    TargetSource getSource();
+
+    void setTarget(const Temperature & target);
+
+    Temperature getTarget();
+
+    void setSchedule(Schedule * schedule);
+
+    Schedule * getSchedule();
 
     Temperature * getTemperature();
 
@@ -55,10 +63,11 @@ private:
     void runCool();
 
     OperatingModes operatingMode = Off;
-    Temperature * target = 0;
+    Temperature target;
     TemperatureSensor * temperatureSensor = 0;
     Relay * heatingRelay;
     Relay * coolingRelay;
     int debounce = 0;
     TargetSource targetSource = Thermostat::TargetSource::Manual;
+    Schedule * schedule = 0;
 };
