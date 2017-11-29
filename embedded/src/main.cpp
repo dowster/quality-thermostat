@@ -1,5 +1,6 @@
 extern "C"{
 #include "mgos.h"
+#include <sys/time.h>
 }
 
 #include <ctime>
@@ -68,7 +69,8 @@ void loop(void *arg)
     thermostatA->getStatus();
     LOG(LL_INFO, ("----------------------------------------------"));   
     
-    LOG(LL_INFO, ("Time: %ld", std::time(NULL)));
+    LOG(LL_INFO, ("Time: %lf", ((std::time(NULL) - 60 * 60 * 24 * 6) % (60 * 60 * 24)) / (60.0f * 60.0f)));
+    
 
     (void)arg;
 }

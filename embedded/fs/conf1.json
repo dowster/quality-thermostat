@@ -2,8 +2,8 @@
     "wifi": {
         "sta": {
             "enable": true,
-            "ssid": "NETGEAR70",
-            "pass": "modernraven618",
+            "ssid": "Garage-2.4GHZ",
+            "pass": "falafel1",
             "user": "",
             "anon_identity": "",
             "cert": "",
