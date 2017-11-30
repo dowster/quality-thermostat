@@ -32,7 +32,7 @@ public:
 
     Temperature operator-(const Temperature& temp);
 
-    Temperature operator=(const Temperature& temp);
+    Temperature& operator=(const Temperature& temp);
     
     Temperature() { };
 

@@ -1,12 +1,12 @@
 extern "C"{
-#include "mgos.h"
-#include <sys/time.h>
+    #include "mgos.h"
+    #include <sys/time.h>
 }
 
 #include <ctime>
 
 #include "../lib/thermostat/Thermostat.h"
-#include "../lib/thermostat/Relay.h"
+#include "../lib/thermostat/relays/HardwareRelay.h"
 #include "../lib/thermostat/sensors/TMP36.h"
 #include "../lib/thermostat/Temperature.h"
 #include "../lib/thermostat/Schedule.h"
@@ -29,8 +29,8 @@ enum mgos_app_init_result mgos_app_init(void) {
 
 void setup()
 {
-    heatingRelay = new Relay(41);
-    coolingRelay = new Relay(40);
+    heatingRelay = new HardwareRelay(41);
+    coolingRelay = new HardwareRelay(40);
 
     temp = new TMP36(36);
 
@@ -69,7 +69,7 @@ void loop(void *arg)
     thermostatA->getStatus();
     LOG(LL_INFO, ("----------------------------------------------"));   
     
-    LOG(LL_INFO, ("Time: %lf", ((std::time(NULL) - 60 * 60 * 24 * 6) % (60 * 60 * 24)) / (60.0f * 60.0f)));
+    LOG(LL_INFO, ("Time: %lf", ((std::time(NULL) - 60 * 60 * 6) % (60 * 60 * 24)) / (60.0f * 60.0f)));
     
 
     (void)arg;

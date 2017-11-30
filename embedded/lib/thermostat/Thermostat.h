@@ -37,7 +37,7 @@ public:
 
     TargetSource getSource();
 
-    void setTarget(const Temperature & target);
+    void setTarget(Temperature & target);
 
     Temperature getTarget();
 

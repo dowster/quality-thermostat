@@ -3,19 +3,14 @@
 class Relay
 {
 public:    
-    Relay(int pin);
+    Relay() { };
 
-    void turnOn();
+    virtual void turnOn() = 0;
 
-    void turnOff();
+    virtual void turnOff() = 0;
 
     bool getActivated();
 
-    Relay() { };
-    
-   // Relay(const Relay& relay) { };
-
-private:
+protected:
     bool activated = false;
-    int pin = -1;
 };
