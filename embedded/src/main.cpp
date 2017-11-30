@@ -6,14 +6,14 @@ extern "C"{
 #include <ctime>
 
 #include "../lib/thermostat/Thermostat.h"
-#include "../lib/thermostat/Relay.h"
+#include "../lib/thermostat/relays/HardwareRelay.h"
 #include "../lib/thermostat/sensors/TMP36.h"
 #include "../lib/thermostat/Temperature.h"
 #include "../lib/thermostat/Schedule.h"
 
 Thermostat * thermostatA;
-Relay * heatingRelay;
-Relay * coolingRelay;
+HardwareRelay * heatingRelay;
+HardwareRelay * coolingRelay;
 TemperatureSensor * temp;
 Schedule * schedule;
 
@@ -29,8 +29,8 @@ enum mgos_app_init_result mgos_app_init(void) {
 
 void setup()
 {
-    heatingRelay = new Relay(41);
-    coolingRelay = new Relay(40);
+    heatingRelay = new HardwareRelay(41);
+    coolingRelay = new HardwareRelay(40);
 
     temp = new TMP36(36);
 

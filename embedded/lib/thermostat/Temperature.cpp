@@ -72,11 +72,9 @@ Temperature Temperature::operator-(const Temperature& temp)
     return Temperature(this->getTemperature(FARENHEIT) - temp.getTemperature(FARENHEIT), FARENHEIT);
 }
 
-Temperature Temperature::operator=(const Temperature& temp)
+Temperature& Temperature::operator=(const Temperature& temp)
 {
-    Temperature newTemp;
+	temperature = temp.temperature;
 
-    newTemp.temperature = temp.temperature;
-
-    return newTemp;
+	return *this;
 }

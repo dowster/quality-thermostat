@@ -1,6 +1,7 @@
-extern "C"{
-#include "mgos.h"
-}
+
+//C"{
+//#include "mgos.h"
+//}
 
 #include <cstddef>
 
@@ -32,7 +33,7 @@ Thermostat::OperatingModes Thermostat::getOperatingMode()
     return this->operatingMode;
 }
 
-void Thermostat::setTarget(const Temperature & target)
+void Thermostat::setTarget( Temperature & target)
 {
     this->target = target;
 }
@@ -169,6 +170,7 @@ void Thermostat::runOff()
 
 void Thermostat::getStatus()
 {
+	/*
     Temperature * currentTemp = this->getTemperature();
 
     LOG(LL_INFO, ("  Current Temperature: %f F", currentTemp->getTemperature(Temperature::Unit::FARENHEIT)));
@@ -182,4 +184,5 @@ void Thermostat::getStatus()
 
     LOG(LL_INFO, ("  Heating Relay Status: %s", (this->heatingRelay->getActivated()) ? "On" : "Off"));
     LOG(LL_INFO, ("  Cooling Relay Status: %s", (this->coolingRelay->getActivated()) ? "On" : "Off"));
+	*/
 }

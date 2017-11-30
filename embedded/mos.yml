@@ -16,6 +16,7 @@ sources:
   - lib
   - lib/thermostat
   - lib/thermostat/sensors
+  - lib/thermostat/relays
 
 # List of dirs. Files from these dirs will be copied to the device filesystem
 filesystem:
