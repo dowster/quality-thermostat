@@ -74,7 +74,7 @@ Temperature Temperature::operator-(const Temperature& temp)
 
 Temperature& Temperature::operator=(const Temperature& temp)
 {
-	this->temperature = temp.temperature;
+	temperature = temp.temperature;
 
 	return *this;
 }

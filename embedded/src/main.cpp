@@ -25,8 +25,8 @@ extern "C"{
 
 
 Thermostat * thermostatA;
-Relay * heatingRelay;
-Relay * coolingRelay;
+HardwareRelay * heatingRelay;
+HardwareRelay * coolingRelay;
 TemperatureSensor * temp;
 Schedule * schedule;
 

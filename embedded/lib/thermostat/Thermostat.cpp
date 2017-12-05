@@ -1,7 +1,6 @@
-
-extern "C"{
-#include "mgos.h"
-}
+//C"{
+//#include "mgos.h"
+//}
 
 #include <cstddef>
 

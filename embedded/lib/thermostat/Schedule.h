@@ -13,7 +13,7 @@ public:
     };
 
     Temperature getTarget(int dayOfWeek, float time) {
-        LOG(LL_INFO, ("Getting target for day: %d, time: %f", dayOfWeek, time));
+        //LOG(LL_INFO, ("Getting target for day: %d, time: %f", dayOfWeek, time));
 
         if(time < 4.0f)
             return Temperature(this->schedule[dayOfWeek * this->daySettings + NIGHT], this->currentUnit);
