@@ -18,6 +18,19 @@
                 ]
             },
             "intelliSenseMode": "clang-x64"
+        },
+        {
+            "name": "WIN32",
+            "includePath": [
+                "${workspaceRoot}"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": false,
+                "path": [
+                    "${workspaceRoot}"
+                ]
+            },
+            "intelliSenseMode": "clang-x64"
         }
     ],
     "version": 3
