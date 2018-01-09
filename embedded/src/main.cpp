@@ -1,7 +1,5 @@
 extern "C"{
     #include "mgos.h"
-    #include "mgos_arduino.h"
-    #include "Arduino.h"
     #include <sys/time.h>
     #include "mgos_gpio.h"
 }
@@ -17,9 +15,9 @@ extern "C"{
 #include "../lib/thermostat/Temperature.h"
 #include "../lib/thermostat/Schedule.h"
 
-#define TEMP_UP_BUTTON 13
-#define TEMP_DOWN_BUTTON 12
-#define CYCLE_MODE_BUTTON 16
+#define TEMP_UP_BUTTON 33
+#define TEMP_DOWN_BUTTON 32
+#define CYCLE_MODE_BUTTON 27
 
 #define BUTTON_DEBOUNCE 1000
 
@@ -37,9 +35,9 @@ mgos_timer_id timerID;
 void setup();
 void loop(void *arg);
 
-void increaseTemperatureButton(Thermostat * thermostat);
-void decreaseTemperatureButton(Thermostat * thermostat);
-void cycleOperatingMode(Thermostat * thermostat);
+void increaseTemperatureButton(int pin, void* arg);
+void decreaseTemperatureButton(int pin, void* arg);
+void cycleOperatingMode(int pin, void* arg);
 
 enum mgos_app_init_result mgos_app_init(void) {
   setup();
@@ -48,8 +46,8 @@ enum mgos_app_init_result mgos_app_init(void) {
 
 void setup()
 {
-    heatingRelay = new HardwareRelay(41);
-    coolingRelay = new HardwareRelay(40);
+    heatingRelay = new HardwareRelay(34);
+    coolingRelay = new HardwareRelay(35);
 
     temp = new TMP36(36);
 
@@ -75,13 +73,16 @@ void setup()
     thermostatA->setOperatingMode(Thermostat::OperatingModes::Heating);
 
     LOG(LL_INFO, ("Setting Source"));
-    thermostatA->setSource(Thermostat::TargetSource::Scheduled);
+    thermostatA->setSource(Thermostat::TargetSource::Manual);
 
     timerID = mgos_set_timer(1000, 1, &loop, NULL);
+    mgos_gpio_set_mode(TEMP_UP_BUTTON, MGOS_GPIO_MODE_INPUT);
+    mgos_gpio_set_mode(TEMP_DOWN_BUTTON, MGOS_GPIO_MODE_INPUT);
+    mgos_gpio_set_mode(CYCLE_MODE_BUTTON, MGOS_GPIO_MODE_INPUT);
 
-    mgos_gpio_set_button_handler(TEMP_UP_BUTTON, MGOS_GPIO_PULL_UP, MGOS_GPIO_INT_EDGE_NEG, BUTTON_DEBOUNCE, &increaseTemperatureButton, thermostatA);
-    mgos_gpio_set_button_handler(TEMP_DOWN_BUTTON, MGOS_GPIO_PULL_UP, MGOS_GPIO_INT_EDGE_NEG, BUTTON_DEBOUNCE, &decreaseTemperatureButton, thermostatA);
-    mgos_gpio_set_button_handler(CYCLE_MODE_BUTTON, MGOS_GPIO_PULL_UP, MGOS_GPIO_INT_EDGE_NEG, BUTTON_DEBOUNCE, &cycleOperatingMode, thermostatA);
+    mgos_gpio_set_button_handler(TEMP_UP_BUTTON, MGOS_GPIO_PULL_UP, MGOS_GPIO_INT_EDGE_NEG, BUTTON_DEBOUNCE, &increaseTemperatureButton, NULL);
+    mgos_gpio_set_button_handler(TEMP_DOWN_BUTTON, MGOS_GPIO_PULL_UP, MGOS_GPIO_INT_EDGE_NEG, BUTTON_DEBOUNCE, &decreaseTemperatureButton, NULL);
+    mgos_gpio_set_button_handler(CYCLE_MODE_BUTTON, MGOS_GPIO_PULL_UP, MGOS_GPIO_INT_EDGE_NEG, BUTTON_DEBOUNCE, &cycleOperatingMode, NULL);
 
    // display = mgos_ssd1306_create_i2c(39, Adafruit_SSD1306::Resolution::RES_128_64);
 }
@@ -99,30 +100,44 @@ void loop(void *arg)
     (void)arg;
 }
 
-void increaseTemperatureButton(Thermostat * thermostat)
+void increaseTemperatureButton(int pin, void* arg)
 {
-    thermostat->setTarget(thermostat->getTarget() + Temperature(1.0f, Temperature::Unit::FARENHEIT));
+    LOG(LL_INFO, ("Increase Temperature Button Pressed"));
+    
+    Temperature newTemp = thermostatA->getTarget() + Temperature(1.0f, Temperature::Unit::FARENHEIT);
+    thermostatA->setTarget(newTemp);
+
+    (void) pin;
 }
 
-void decreaseTemperatureButton(Thermostat * thermostat)
+void decreaseTemperatureButton(int pin, void* arg)
 {
-    thermostat->setTarget(thermostat->getTarget() - Temperature(1.0f, Temperature::Unit::FARENHEIT));
+    LOG(LL_INFO, ("Decrease Temperature Button Pressed"));
+    
+    Temperature newTemp = thermostatA->getTarget() - Temperature(1.0f, Temperature::Unit::FARENHEIT);
+    thermostatA->setTarget(newTemp);
+
+    (void) pin;
 }
 
-void cycleOperatingMode(Thermostat * thermostat)
+void cycleOperatingMode(int pin, void* arg)
 {
-    switch(thermostat->getOperatingMode()) 
+    LOG(LL_INFO, ("Cycle Operation Mode Pressed"));
+
+    switch(thermostatA->getOperatingMode()) 
     {
         case Thermostat::OperatingModes::Cooling:
-            thermostat->setOperatingMode(Thermostat::OperatingModes::Heating);
+            thermostatA->setOperatingMode(Thermostat::OperatingModes::Heating);
             break;
         case Thermostat::OperatingModes::Heating:
-            thermostat->setOperatingMode(Thermostat::OperatingModes::Off);
+            thermostatA->setOperatingMode(Thermostat::OperatingModes::Off);
             break;
         case Thermostat::OperatingModes::Off:
-            thermostat->setOperatingMode(Thermostat::OperatingModes::Cooling);
+            thermostatA->setOperatingMode(Thermostat::OperatingModes::Cooling);
             break;
         default:
-            thermostat->setOperatingMode(Thermostat::OperatingModes::Cooling);
+            thermostatA->setOperatingMode(Thermostat::OperatingModes::Cooling);
     }
+
+    (void) pin;
 }
