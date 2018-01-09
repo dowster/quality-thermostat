@@ -1,0 +1,9 @@
+build
+build/**
+deps
+deps/**
+
+tests/ThermostatUnitTests/ipch
+tests/ThermostatUnitTests/TestResults
+tests/ThermostatUnitTests/ThermostatUnitTests/Debug
+tests/ThermostatUnitTests/*VC.db

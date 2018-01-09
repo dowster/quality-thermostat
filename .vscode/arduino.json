@@ -1,0 +1,7 @@
+{
+    "board": "esp8266:esp8266:nodemcu",
+    "sketch": "main/main.ino",
+    "port": "/dev/ttyUSB0",
+    "configuration": "CpuFrequency=80,UploadSpeed=115200,FlashSize=4M3M",
+    "output": "../build"
+}
