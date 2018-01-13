@@ -27,10 +27,11 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": false,
                 "path": [
-                    "${workspaceRoot}"
+                    "${workspaceRoot}",
+                    "${workspaceRoot}/build/gen"
                 ]
             },
-            "intelliSenseMode": "clang-x64"
+            "intelliSenseMode": "msvc-x64"
         }
     ],
     "version": 3

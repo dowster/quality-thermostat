@@ -13,14 +13,14 @@ TMP36::TMP36(int pin)
     mgos_adc_enable(pin);
 }
 
-Temperature * TMP36::getTemperature()
+Temperature TMP36::getTemperature()
 {
-    return new Temperature(getCelsius(), Temperature::Unit::CELSIUS);
+    return Temperature(getCelsius(), Temperature::Unit::CELSIUS);
 }
 
 float TMP36::getCelsius()
 {
     float converted = mgos_adc_read(this->pin) * (100.0f / 1024.0f) - 50.0f;
-    LOG(LL_INFO, ("PIN Reading: %d, Converted: %f", mgos_adc_read(this->pin), converted));
+    LOG(LL_DEBUG, ("PIN Reading: %d, Converted: %f", mgos_adc_read(this->pin), converted));
     return converted;
 }

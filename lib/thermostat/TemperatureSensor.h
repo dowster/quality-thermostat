@@ -5,6 +5,6 @@
 class TemperatureSensor
 {
 public:
-    virtual Temperature * getTemperature() = 0;
+    virtual Temperature getTemperature() = 0;
 
 };

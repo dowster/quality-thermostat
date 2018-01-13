@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "MockTemperatureSensor.h"
 
-Temperature * MockTemperatureSensor::getTemperature()
+Temperature MockTemperatureSensor::getTemperature()
 {
-	return new Temperature(*this->temp);
+	return Temperature(this->temp);
 }
 
 void MockTemperatureSensor::setTemperature(Temperature * temp)

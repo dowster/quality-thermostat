@@ -8,7 +8,7 @@ class TMP36 : public TemperatureSensor
 public:
     TMP36(int pin);
 
-    virtual Temperature * getTemperature();
+    virtual Temperature getTemperature();
 
 private:
     float getCelsius();

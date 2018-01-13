@@ -1,6 +1,6 @@
-extern "C"{
-#include "mgos.h"
-}
+//extern "C"{
+//#include "mgos.h"
+//}
 
 #include <cstddef>
 
@@ -17,13 +17,13 @@ Thermostat::Thermostat(
 
     this->heatingRelay = heatingRelay;
     this->coolingRelay = coolingRelay;
-
-    //this->setOperatingMode(Thermostat::OperatingModes::Off);
-    //this->setTarget(new Temperature(69, Temperature::Unit::FARENHEIT));    
 }
 
-void Thermostat::setOperatingMode(OperatingModes mode)
+void Thermostat::changeOperatingMode(OperatingModes mode)
 {
+    if(this->operatingMode != mode)
+        this->runOff();
+
     this->operatingMode = mode;
 }
 
@@ -32,7 +32,7 @@ Thermostat::OperatingModes Thermostat::getOperatingMode()
     return this->operatingMode;
 }
 
-void Thermostat::setTarget( Temperature & target)
+void Thermostat::setTarget(const Temperature & target)
 {
     this->target = target;
 }
@@ -66,7 +66,7 @@ Schedule * Thermostat::getSchedule()
     return this->schedule;
 }
 
-Temperature * Thermostat::getTemperature()
+Temperature Thermostat::getTemperature()
 {
     return this->temperatureSensor->getTemperature();
 }
@@ -89,11 +89,11 @@ void Thermostat::loop()
 
 void Thermostat::runHeat()
 {
-        Temperature * currentTemp = this->temperatureSensor->getTemperature();
+        Temperature currentTemp = this->temperatureSensor->getTemperature();
 
         if(
             !this->heatingRelay->getActivated() &&
-            *currentTemp < this->getTarget() - this->Threshold 
+            currentTemp < this->getTarget() - this->Threshold 
         )
         {
             if(++this->debounce >= this->WaitPeriod)
@@ -104,7 +104,7 @@ void Thermostat::runHeat()
         }
         else if(
             this->heatingRelay->getActivated() &&
-            *currentTemp > this->getTarget() + this->Threshold
+            currentTemp > this->getTarget() + this->Threshold
         )
         {
             if(++this->debounce >= this->WaitPeriod)
@@ -117,18 +117,16 @@ void Thermostat::runHeat()
         {
             this->debounce = 0;
         }
-
-        delete currentTemp;
     
 }
 
 void Thermostat::runCool()
 {
-        Temperature * currentTemp = this->temperatureSensor->getTemperature();
+        Temperature currentTemp = this->temperatureSensor->getTemperature();
 
         if(
             !this->coolingRelay->getActivated() &&
-            *currentTemp > this->getTarget() + this->Threshold
+            currentTemp > this->getTarget() + this->Threshold
         )
         {
             if(++this->debounce >= this->WaitPeriod)
@@ -139,7 +137,7 @@ void Thermostat::runCool()
         }
         else if(
             this->coolingRelay->getActivated() &&
-            *currentTemp < this->getTarget() - this->Threshold
+            currentTemp < this->getTarget() - this->Threshold
         )
         {
             if(++this->debounce >= this->WaitPeriod)
@@ -152,8 +150,6 @@ void Thermostat::runCool()
         {
             this->debounce = 0;
         }
-
-        delete currentTemp;
     
 }
 
@@ -169,11 +165,10 @@ void Thermostat::runOff()
 
 void Thermostat::getStatus()
 {
-	
-    Temperature * currentTemp = this->getTemperature();
+	/*
+    Temperature currentTemp = this->getTemperature();
 
-    LOG(LL_INFO, ("  Current Temperature: %f F", currentTemp->getTemperature(Temperature::Unit::FARENHEIT)));
-    delete currentTemp;
+    LOG(LL_INFO, ("  Current Temperature: %f F", currentTemp.getTemperature(Temperature::Unit::FARENHEIT)));
 
     switch(this->getOperatingMode())
     {
@@ -212,5 +207,13 @@ void Thermostat::getStatus()
 
     LOG(LL_INFO, ("  Heating Relay Status: %s", (this->heatingRelay->getActivated()) ? "On" : "Off"));
     LOG(LL_INFO, ("  Cooling Relay Status: %s", (this->coolingRelay->getActivated()) ? "On" : "Off"));
-	
+	*/
+}
+
+Relay * Thermostat::getHeatingRelay() {
+    return this->heatingRelay;
+}
+
+Relay * Thermostat::getCoolingRelay() {
+    return this->coolingRelay;
 }

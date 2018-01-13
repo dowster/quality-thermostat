@@ -31,7 +31,7 @@ namespace ThermostatUnitTests
 			Assert::IsFalse(hr->getActivated());
 			Assert::IsFalse(cr->getActivated());
 
-			testThermostat->setOperatingMode(Thermostat::OperatingModes::Cooling);
+			testThermostat->changeOperatingMode(Thermostat::OperatingModes::Cooling);
 			testThermostat->setSource(Thermostat::TargetSource::Manual);
 			testThermostat->setTarget(Temperature(75, Temperature::Unit::FARENHEIT));
 
@@ -62,7 +62,7 @@ namespace ThermostatUnitTests
 			Assert::IsFalse(hr->getActivated());
 			Assert::IsTrue(cr->getActivated());
 
-			testThermostat->setOperatingMode(Thermostat::OperatingModes::Cooling);
+			testThermostat->changeOperatingMode(Thermostat::OperatingModes::Cooling);
 			testThermostat->setSource(Thermostat::TargetSource::Manual);
 			testThermostat->setTarget(Temperature(75, Temperature::Unit::FARENHEIT));
 
@@ -94,7 +94,7 @@ namespace ThermostatUnitTests
 			Assert::IsFalse(hr->getActivated());
 			Assert::IsFalse(cr->getActivated());
 
-			testThermostat->setOperatingMode(Thermostat::OperatingModes::Heating);
+			testThermostat->changeOperatingMode(Thermostat::OperatingModes::Heating);
 			testThermostat->setSource(Thermostat::TargetSource::Manual);
 			testThermostat->setTarget(Temperature(75, Temperature::Unit::FARENHEIT));
 
@@ -125,7 +125,7 @@ namespace ThermostatUnitTests
 			Assert::IsTrue(hr->getActivated());
 			Assert::IsFalse(cr->getActivated());
 
-			testThermostat->setOperatingMode(Thermostat::OperatingModes::Heating);
+			testThermostat->changeOperatingMode(Thermostat::OperatingModes::Heating);
 			testThermostat->setSource(Thermostat::TargetSource::Manual);
 			testThermostat->setTarget(Temperature(75, Temperature::Unit::FARENHEIT));
 
@@ -208,7 +208,7 @@ namespace ThermostatUnitTests
 			Assert::IsFalse(hr->getActivated());
 			Assert::IsFalse(cr->getActivated());
 
-			testThermostat->setOperatingMode(Thermostat::OperatingModes::Cooling);
+			testThermostat->changeOperatingMode(Thermostat::OperatingModes::Cooling);
 			testThermostat->setSource(Thermostat::TargetSource::Manual);
 			testThermostat->setTarget(Temperature(75, Temperature::Unit::FARENHEIT));
 
@@ -220,7 +220,7 @@ namespace ThermostatUnitTests
 			Assert::IsFalse(hr->getActivated());
 			Assert::IsTrue(cr->getActivated());
 
-			testThermostat->setOperatingMode(Thermostat::OperatingModes::Off);
+			testThermostat->changeOperatingMode(Thermostat::OperatingModes::Off);
 
 			testThermostat->loop();
 
@@ -239,7 +239,7 @@ namespace ThermostatUnitTests
 			Assert::IsFalse(hr->getActivated());
 			Assert::IsFalse(cr->getActivated());
 
-			testThermostat->setOperatingMode(Thermostat::OperatingModes::Heating);
+			testThermostat->changeOperatingMode(Thermostat::OperatingModes::Heating);
 			testThermostat->setSource(Thermostat::TargetSource::Manual);
 			testThermostat->setTarget(Temperature(75, Temperature::Unit::FARENHEIT));
 
@@ -251,7 +251,7 @@ namespace ThermostatUnitTests
 			Assert::IsTrue(hr->getActivated());
 			Assert::IsFalse(cr->getActivated());
 
-			testThermostat->setOperatingMode(Thermostat::OperatingModes::Off);
+			testThermostat->changeOperatingMode(Thermostat::OperatingModes::Off);
 
 			testThermostat->loop();
 
@@ -270,7 +270,7 @@ namespace ThermostatUnitTests
 			Assert::IsFalse(hr->getActivated());
 			Assert::IsFalse(cr->getActivated());
 
-			testThermostat->setOperatingMode(Thermostat::OperatingModes::Off);
+			testThermostat->changeOperatingMode(Thermostat::OperatingModes::Off);
 			testThermostat->setSource(Thermostat::TargetSource::Manual);
 			testThermostat->setTarget(Temperature(75, Temperature::Unit::FARENHEIT));
 
