@@ -1,6 +1,6 @@
-//extern "C"{
-//#include "mgos.h"
-//}
+extern "C"{
+    #include "mgos.h"
+}
 
 #include <cstddef>
 
@@ -165,7 +165,7 @@ void Thermostat::runOff()
 
 void Thermostat::getStatus()
 {
-	/*
+	
     Temperature currentTemp = this->getTemperature();
 
     LOG(LL_INFO, ("  Current Temperature: %f F", currentTemp.getTemperature(Temperature::Unit::FARENHEIT)));
@@ -207,7 +207,7 @@ void Thermostat::getStatus()
 
     LOG(LL_INFO, ("  Heating Relay Status: %s", (this->heatingRelay->getActivated()) ? "On" : "Off"));
     LOG(LL_INFO, ("  Cooling Relay Status: %s", (this->coolingRelay->getActivated()) ? "On" : "Off"));
-	*/
+	
 }
 
 Relay * Thermostat::getHeatingRelay() {

@@ -1,6 +1,6 @@
 {
   "debug": {
-    "level": 3
+    "level": 2
   },  
   "device": {
     "id": "thermy_0001"
@@ -47,5 +47,12 @@
             "disable_after": 0,
             "keep_enabled": true
         }
+    },
+    "i2c": {
+      "enable": true, 
+      "freq": 100000, 
+      "debug": false, 
+      "sda_gpio": 4, 
+      "scl_gpio": 5
     }
 }

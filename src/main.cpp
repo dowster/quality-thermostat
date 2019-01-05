@@ -4,8 +4,15 @@ extern "C"{
     #include "mgos_gpio.h"
     #include "mgos_mqtt.h"
     #include "mgos_aws_shadow.h"
+    #include "string.h"
 }
 
+#include "images.cpp"
+
+#include "mgos_arduino_ssd1306.h"
+
+#define OLED_RESET 4
+Adafruit_SSD1306 * display;
 
 #include <ctime>
 
@@ -17,7 +24,7 @@ extern "C"{
 
 #define TEMP_UP_BUTTON 33
 #define TEMP_DOWN_BUTTON 32
-#define CYCLE_MODE_BUTTON 27
+#define CYCLE_MODE_BUTTON 2
 
 #define BUTTON_DEBOUNCE 1000
 
@@ -36,8 +43,9 @@ void loop(void *arg);
 void increaseTemperatureButton(int pin, void* arg);
 void decreaseTemperatureButton(int pin, void* arg);
 void cycleOperatingMode(int pin, void* arg);
-void sendMQTTUpdate(Thermostat * thermostat);
-void MQTTConnectHandler(struct mg_connection *nc, int ev, void *ev_data MG_UD_ARG(void *user_data));
+void sendMQTTUpdate(void * arg);
+void WriteString(Adafruit_SSD1306 * display, String string);
+void WriteString(Adafruit_SSD1306 * display, char *string);
 
 void awsShadowHandler (
     void *arg, enum mgos_aws_shadow_event ev, uint64_t version,
@@ -54,7 +62,7 @@ void setup()
     heatingRelay = new HardwareRelay(14);
     coolingRelay = new HardwareRelay(12);
 
-    temp = new TMP36(36);
+    temp = new TMP36(0);
 
     thermostatA  = new Thermostat(
         temp,
@@ -81,6 +89,7 @@ void setup()
     thermostatA->setSource(Thermostat::TargetSource::Manual);
 
     timerID = mgos_set_timer(1000, 1, &loop, NULL);
+    mgos_set_timer(10000, 1, &sendMQTTUpdate, thermostatA);
     mgos_gpio_set_mode(TEMP_UP_BUTTON, MGOS_GPIO_MODE_INPUT);
     mgos_gpio_set_mode(TEMP_DOWN_BUTTON, MGOS_GPIO_MODE_INPUT);
     mgos_gpio_set_mode(CYCLE_MODE_BUTTON, MGOS_GPIO_MODE_INPUT);
@@ -89,6 +98,26 @@ void setup()
     mgos_gpio_set_button_handler(TEMP_DOWN_BUTTON, MGOS_GPIO_PULL_UP, MGOS_GPIO_INT_EDGE_NEG, BUTTON_DEBOUNCE, &decreaseTemperatureButton, NULL);
     mgos_gpio_set_button_handler(CYCLE_MODE_BUTTON, MGOS_GPIO_PULL_UP, MGOS_GPIO_INT_EDGE_NEG, BUTTON_DEBOUNCE, &cycleOperatingMode, NULL);
 
+    display = mgos_ssd1306_create_i2c(-1, MGOS_SSD1306_RES_128_64);
+  display->begin(SSD1306_SWITCHCAPVCC, 0x3C, false); 
+      display->clearDisplay();
+    display->drawBitmap(0,0,dowsterIcon_128x32, 128, 32, 1, 0);
+    display->drawBitmap(28,32,turboIcon_32x22, 32, 22, 1, 0);
+    display->drawBitmap(60,32,flameIcon_32x22, 32, 22, 1, 0);
+    display->display();
+    delay(2000);
+
+  // Clear the buffer.
+  display->clearDisplay();
+  display->drawBitmap(96,0,turboIcon_32x22, 32, 22, 1, 0);
+  display->drawBitmap(96,24,flameIcon_32x22, 32, 22, 1, 0);
+  // draw a single pixel
+  // Show the display buffer on the hardware.
+  // NOTE: You _must_ call display after making any drawing commands
+  // to make them visible on the display hardware!
+  display->display();
+  delay(2000);
+
     mgos_aws_shadow_set_state_handler(awsShadowHandler, thermostatA);
 }
 
@@ -96,11 +125,45 @@ void loop(void *arg)
 {
     thermostatA->loop();
 
+  display->clearDisplay();
+      display->setTextSize(2);
+  display->setTextColor(WHITE);
+  display->setCursor(0,0);
+  
+  WriteString(display, "Thermy");
+  display->println(); 
+  switch(thermostatA->getOperatingMode()) {
+              case Thermostat::OperatingModes::Heating:
+        WriteString(display, "Heat");
+        break;
+        case Thermostat::OperatingModes::Cooling:
+        WriteString(display, "Cool");
+        break;
+        case Thermostat::OperatingModes::Off:
+        WriteString(display, "Off");
+        break;
+        default:
+        WriteString(display, "Rekt");
+        break;
+  }
+  display->println(); 
+  char buffer[5];
+  sprintf(buffer, "%3.1f", thermostatA->getTemperature().getTemperature(Temperature::Unit::FARENHEIT));
+  WriteString(display, buffer);
+  WriteString(display, "F");
+
+  display->drawBitmap(96,0,turboIcon_32x22, 32, 22, 1, 0);
+  display->drawBitmap(96,24,flameIcon_32x22, 32, 22, 1, 0);
+  // draw a single pixel
+  // Show the display buffer on the hardware.
+  // NOTE: You _must_ call display after making any drawing commands
+  // to make them visible on the display hardware!
+  display->display();
+  display->display();
+
     LOG(LL_INFO, ("----------------Update Message----------------"));
     thermostatA->getStatus();
     LOG(LL_INFO, ("----------------------------------------------"));   
-
-    sendMQTTUpdate(thermostatA);
 
     (void)arg;
 }
@@ -111,7 +174,7 @@ void increaseTemperatureButton(int pin, void* arg)
     
     Temperature newTemp = thermostatA->getTarget() + Temperature(1.0f, Temperature::Unit::FARENHEIT);
     thermostatA->setTarget(newTemp);
-
+    loop(NULL);
     (void) pin;
 }
 
@@ -121,6 +184,7 @@ void decreaseTemperatureButton(int pin, void* arg)
     
     Temperature newTemp = thermostatA->getTarget() - Temperature(1.0f, Temperature::Unit::FARENHEIT);
     thermostatA->setTarget(newTemp);
+    loop(NULL);
 
     (void) pin;
 }
@@ -144,11 +208,14 @@ void cycleOperatingMode(int pin, void* arg)
             thermostatA->changeOperatingMode(Thermostat::OperatingModes::Cooling);
     }
 
+    loop(NULL);
     (void) pin;
+    (void*)arg;
 }
 
-void sendMQTTUpdate(Thermostat * thermostat) {
-    mgos_mqtt_pub("test", "Sending MQTT Update", 19, 1, false);
+void sendMQTTUpdate(void * arg) {
+    Thermostat * thermostat = (Thermostat*)arg;
+
     mgos_aws_shadow_updatef(
         0, 
         "{reported:{mode: %d, temp: %f, target: %f, heating: %s, cooling: %s, waitTime: %d, debounce: %d}}", 
@@ -156,43 +223,52 @@ void sendMQTTUpdate(Thermostat * thermostat) {
         thermostat->getHeatingRelay()->getActivated() ? "true" : "false",thermostat->getCoolingRelay()->getActivated() ? "true" : "false", thermostat->WaitPeriod, thermostat->getDebounce());
 }
 
-void MQTTConnectHandler(struct mg_connection *nc, int ev, void *ev_data MG_UD_ARG(void *user_data))
-{
-    LOG(LL_INFO, ("MQTT Con Handler (%d)", ev));
-	
-    (void) nc;
-    (void) ev_data;
-    (void) user_data;
-}
 
 void awsShadowHandler (
     void *arg, enum mgos_aws_shadow_event ev, uint64_t version,
     const struct mg_str reported, const struct mg_str desired,
     const struct mg_str reported_md, const struct mg_str desired_md) {
-    
+
     LOG(LL_INFO, ("Processing shadow event: %d", ev));
 
-    if(reported.len > 0) {
+    if(desired.len > 0 && ev == MGOS_AWS_SHADOW_UPDATE_DELTA) {
         int mode = -1;
         float target = -1;
 
-        LOG(LL_INFO, ("Reported=%.*s", reported.len, reported.p));
+        LOG(LL_INFO, ("Reported=%.*s", desired.len, desired.p));
         
         LOG(LL_INFO, ("Got to 1"));
-        int parsed = json_scanf(reported.p, reported.len, 
+        json_scanf(desired.p, desired.len, 
                                 "{mode: %d, target: %f}",
                                 &mode,
                                 &target);
                                 
-            LOG(LL_INFO, ("Parsed (%d) parameters: [mode=%d, target=%f]", parsed, mode, target));
-        if(parsed == 2) {
+            LOG(LL_INFO, ("Parsed parameters: [mode=%d, target=%f]", mode, target));
 
+        if(target > 0.0f) {
             Thermostat * thermostat = (Thermostat*)arg;
             thermostat->getStatus();
             thermostat->setTarget(Temperature(target, Temperature::Unit::FARENHEIT));
+            mgos_aws_shadow_update_simple(0, "{desired: target: null}");
+        }
 
+        if(mode != -1) {
+            Thermostat * thermostat = (Thermostat*)arg;
             thermostat->changeOperatingMode((Thermostat::OperatingModes)mode);
         }
 
     }
+}
+
+void WriteString(Adafruit_SSD1306 * display, String string) {
+  int len = string.length();
+  for(int i = 0; i < len; i++) {
+    display->write(string.charAt(i));
+  }
+}
+
+void WriteString(Adafruit_SSD1306 * display, char *string) {
+  for(int i = 0; string[i] != 0; i++) {
+    display->write(string[i]);
+  }
 }

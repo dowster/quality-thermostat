@@ -4,6 +4,7 @@
         "thermostat.h": "c",
         "temperaturesensor.h": "c",
         "temperature.h": "c",
-        "schedule.h": "c"
+        "schedule.h": "c",
+        "iosfwd": "cpp"
     }
 }
