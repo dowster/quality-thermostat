@@ -41,7 +41,7 @@ public:
      * 
      * @param mode The OperatingMode to transition to
      */
-    void changeOperatingMode(OperatingModes mode);
+    void setOperatingMode(OperatingModes mode);
 
     /**
      * Get the current operating mode of the thermostat.

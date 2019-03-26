@@ -19,7 +19,7 @@ Thermostat::Thermostat(
     this->coolingRelay = coolingRelay;
 }
 
-void Thermostat::changeOperatingMode(OperatingModes mode)
+void Thermostat::setOperatingMode(OperatingModes mode)
 {
     if(this->operatingMode != mode)
         this->runOff();

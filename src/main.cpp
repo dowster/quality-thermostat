@@ -75,7 +75,7 @@ void setup()
     thermostatA->setTarget(temp);
 
     LOG(LL_INFO, ("Setting Operating Mode "));
-    thermostatA->changeOperatingMode(Thermostat::OperatingModes::Heating);
+    thermostatA->setOperatingMode(Thermostat::OperatingModes::Heating);
 
     LOG(LL_INFO, ("Setting Source"));
     thermostatA->setSource(Thermostat::TargetSource::Manual);
@@ -132,16 +132,16 @@ void cycleOperatingMode(int pin, void* arg)
     switch(thermostatA->getOperatingMode()) 
     {
         case Thermostat::OperatingModes::Cooling:
-            thermostatA->changeOperatingMode(Thermostat::OperatingModes::Heating);
+            thermostatA->setOperatingMode(Thermostat::OperatingModes::Heating);
             break;
         case Thermostat::OperatingModes::Heating:
-            thermostatA->changeOperatingMode(Thermostat::OperatingModes::Off);
+            thermostatA->setOperatingMode(Thermostat::OperatingModes::Off);
             break;
         case Thermostat::OperatingModes::Off:
-            thermostatA->changeOperatingMode(Thermostat::OperatingModes::Cooling);
+            thermostatA->setOperatingMode(Thermostat::OperatingModes::Cooling);
             break;
         default:
-            thermostatA->changeOperatingMode(Thermostat::OperatingModes::Cooling);
+            thermostatA->setOperatingMode(Thermostat::OperatingModes::Cooling);
     }
 
     (void) pin;
@@ -191,7 +191,7 @@ void awsShadowHandler (
             thermostat->getStatus();
             thermostat->setTarget(Temperature(target, Temperature::Unit::FARENHEIT));
 
-            thermostat->changeOperatingMode((Thermostat::OperatingModes)mode);
+            thermostat->setOperatingMode((Thermostat::OperatingModes)mode);
         }
 
     }
