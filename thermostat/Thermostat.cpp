@@ -92,7 +92,7 @@ void Thermostat::runHeat()
         Temperature currentTemp = this->temperatureSensor->getTemperature();
 
         if(
-            !this->heatingRelay->getActivated() &&
+            !this->heatingRelay->isOn() &&
             currentTemp < this->getTarget() - this->Threshold 
         )
         {
@@ -103,7 +103,7 @@ void Thermostat::runHeat()
             }
         }
         else if(
-            this->heatingRelay->getActivated() &&
+            this->heatingRelay->isOn() &&
             currentTemp > this->getTarget() + this->Threshold
         )
         {
@@ -125,7 +125,7 @@ void Thermostat::runCool()
         Temperature currentTemp = this->temperatureSensor->getTemperature();
 
         if(
-            !this->coolingRelay->getActivated() &&
+            !this->coolingRelay->isOn() &&
             currentTemp > this->getTarget() + this->Threshold
         )
         {
@@ -136,7 +136,7 @@ void Thermostat::runCool()
             }
         }
         else if(
-            this->coolingRelay->getActivated() &&
+            this->coolingRelay->isOn() &&
             currentTemp < this->getTarget() - this->Threshold
         )
         {
@@ -155,59 +155,12 @@ void Thermostat::runCool()
 
 void Thermostat::runOff()
 {
-    if(this->heatingRelay->getActivated())
+    if(this->heatingRelay->isOn())
         this->heatingRelay->turnOff();
-    if(this->coolingRelay->getActivated())
+    if(this->coolingRelay->isOn())
         this->coolingRelay->turnOff();
     if(this->debounce != 0)
         this->debounce = 0;
-}
-
-void Thermostat::getStatus()
-{
-	/*
-    Temperature currentTemp = this->getTemperature();
-
-    LOG(LL_INFO, ("  Current Temperature: %f F", currentTemp.getTemperature(Temperature::Unit::FARENHEIT)));
-
-    switch(this->getOperatingMode())
-    {
-        case Thermostat::OperatingModes::Heating:
-        LOG(LL_INFO, ("  Current Mode: Heating"));
-        break;
-        case Thermostat::OperatingModes::Cooling:
-        LOG(LL_INFO, ("  Current Mode: Cooling"));
-        break;
-        case Thermostat::OperatingModes::Off:
-        LOG(LL_INFO, ("  Current Mode: Off"));
-        break;
-        default:
-        LOG(LL_INFO, ("  Current Mode: Undefined"));
-        break;
-    }
-
-    switch(this->getSource())
-    {
-        case Thermostat::TargetSource::Scheduled:
-        LOG(LL_INFO, ("  Current Source: Scheduled"));
-        break;
-        case Thermostat::TargetSource::Manual:
-        LOG(LL_INFO, ("  Current Source: Manual"));
-        break;
-        default:
-        LOG(LL_INFO, ("  Current Source: Undefined"));
-        break;
-    }
-
-    LOG(LL_INFO, ("  Current Threshold: %f F", this->Threshold.getTemperature(Temperature::Unit::FARENHEIT)));
-
-    LOG(LL_INFO, ("  Current Target: %f F", this->getTarget().getTemperature(Temperature::Unit::FARENHEIT)));
-
-    LOG(LL_INFO, ("  Current Debounce Value: %i", this->debounce));
-
-    LOG(LL_INFO, ("  Heating Relay Status: %s", (this->heatingRelay->getActivated()) ? "On" : "Off"));
-    LOG(LL_INFO, ("  Cooling Relay Status: %s", (this->coolingRelay->getActivated()) ? "On" : "Off"));
-	*/
 }
 
 Relay * Thermostat::getHeatingRelay() {

@@ -150,22 +150,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\lib\thermostat\Relay.h" />
-    <ClInclude Include="..\..\..\lib\thermostat\schedule.h" />
-    <ClInclude Include="..\..\..\lib\thermostat\Temperature.h" />
-    <ClInclude Include="..\..\..\lib\thermostat\TemperatureSensor.h" />
-    <ClInclude Include="..\..\..\lib\thermostat\Thermostat.h" />
+    <ClInclude Include="..\..\..\thermostat\Relay.h" />
+    <ClInclude Include="..\..\..\thermostat\schedule.h" />
+    <ClInclude Include="..\..\..\thermostat\Temperature.h" />
+    <ClInclude Include="..\..\..\thermostat\TemperatureSensor.h" />
+    <ClInclude Include="..\..\..\thermostat\Thermostat.h" />
     <ClInclude Include="MockRelay.h" />
     <ClInclude Include="MockTemperatureSensor.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\lib\thermostat\Relay.cpp" />
-    <ClCompile Include="..\..\..\lib\thermostat\Schedule.cpp" />
-    <ClCompile Include="..\..\..\lib\thermostat\Temperature.cpp" />
-    <ClCompile Include="..\..\..\lib\thermostat\TemperatureSensor.cpp" />
-    <ClCompile Include="..\..\..\lib\thermostat\Thermostat.cpp" />
+    <ClCompile Include="..\..\..\thermostat\Relay.cpp" />
+    <ClCompile Include="..\..\..\thermostat\Schedule.cpp" />
+    <ClCompile Include="..\..\..\thermostat\Temperature.cpp" />
+    <ClCompile Include="..\..\..\thermostat\TemperatureSensor.cpp" />
+    <ClCompile Include="..\..\..\thermostat\Thermostat.cpp" />
     <ClCompile Include="MockTemperatureSensor.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
