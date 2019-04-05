@@ -1,6 +1,0 @@
-[submodule "embedded/lib/Adafruit_SSD1306"]
-	path = embedded/lib/Adafruit_SSD1306
-	url = https://github.com/adafruit/Adafruit_SSD1306
-[submodule "embedded/lib/Adafruit-GFX-Library"]
-	path = embedded/lib/Adafruit-GFX-Library
-	url = https://github.com/adafruit/Adafruit-GFX-Library
