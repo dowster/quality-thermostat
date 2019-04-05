@@ -113,12 +113,6 @@ public:
     Thermostat() { };
 
     /**
-     * Uses mongoose logging calls to print out the current status of the
-     * Thermostat. 
-     */
-    void getStatus();
-
-    /**
      * Get the reference to the heating relay used by the thermostat. 
      */
     Relay * getHeatingRelay();

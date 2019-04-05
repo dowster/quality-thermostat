@@ -9,8 +9,8 @@ public:
 
     virtual void turnOff() = 0;
 
-    bool getActivated();
+    bool isOn();
 
 protected:
-    bool activated = false;
+    bool on = false;
 };

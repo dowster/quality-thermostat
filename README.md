@@ -1,15 +1,11 @@
-# A blank Mongoose OS app
+# Generic Thermostat Library
 
-## Overview
+This library provides a abstract thermostat system with 7 day Morning, Daytime, Evening, and Night schedule. It supports heating and cooling controls via a relay abstraction layer and also temperature readings via a sensor abstraction layer. 
 
-This is an empty app, serves as a skeleton for building Mongoose OS
-apps from scratch.
+This was previously written speciffically for the Mongoose-OS platform by Cesanta. I have since isolated the functionality of the Thermostat into a library which should be compatible with any embedded platform. 
 
-## How to install this app
+## Relay Abstraction Layer
+To connect to your relays, create an implementation of the Relay class. Be sure to update the `Relay::on` variable so that the thermostat can check your relay's status. 
 
-- Install and start [mos tool](https://mongoose-os.com/software.html)
-- Switch to the Project page, find and import this app, build and flash it:
-
-<p align="center">
-  <img src="https://mongoose-os.com/images/app1.gif" width="75%">
-</p>
+## Sensor Abstraction Layer
+When creating a sensor be sure to properly format the temperature into a Temperature object. As long as the Temperature object is created with the proper units attached to it the thermostat can handle converting the temperature for display modes and scheduling.
