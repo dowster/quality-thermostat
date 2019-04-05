@@ -17,7 +17,10 @@
                     "/home/dowster/.arduino15/packages/esp8266/hardware/esp8266/2.3.0/cores/esp8266"
                 ]
             },
-            "intelliSenseMode": "clang-x64"
+            "intelliSenseMode": "clang-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         },
         {
             "name": "WIN32",
@@ -31,8 +34,11 @@
                     "${workspaceRoot}/build/gen"
                 ]
             },
-            "intelliSenseMode": "msvc-x64"
+            "intelliSenseMode": "msvc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         }
     ],
-    "version": 3
+    "version": 4
 }

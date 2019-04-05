@@ -9,3 +9,4 @@ tests/ThermostatUnitTests/ThermostatUnitTests/Debug
 tests/ThermostatUnitTests/*VC.db
 
 .directory
+.vscode
